@@ -26,6 +26,11 @@
     (get file-sets key)
     '()))
 
+(defn- add-file-to-set [new-file existing-set]
+  (if (.isDirectory new-file)
+    existing-set
+    (cons new-file existing-set)))
+
 (defn get-file-sets
   ([files] (get-file-sets files {}))
   ([files existing-sets]
@@ -35,6 +40,8 @@
              remaining-files (rest files)
              set-key         (get-set-key current-file)
              file-set        (get-set-from-key existing-sets set-key)
-             new-file-set    (cons current-file file-set)
+             new-file-set    (add-file-to-set current-file file-set)
              new-sets        (assoc existing-sets set-key new-file-set)]
          (recur remaining-files new-sets)))))
+
+(defn describe-file-set [file-set])
