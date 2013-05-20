@@ -36,8 +36,7 @@
   (io/output "Purging file set '" key "' with " (count files) " files.")
   (doseq [file files]
     ;;(io/output "Purging file " (.getName file))
-    ;;(.delete file)
-    ))
+    (.delete file)))
 
 (defn purge-files [build]
   (io/output "Purging files for build-configuration '" (:config build) "'...")
