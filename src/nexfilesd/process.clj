@@ -72,6 +72,7 @@
 
 (defn generate-tablet-ui-for [key file-set]
   ;; TODO: implement
+  ;; TODO: lookup shell invocation from lein-drip code
   )
 
 (defn generate-tablet-ui [build]
