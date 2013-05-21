@@ -1,5 +1,6 @@
 (ns nexfilesd.core
-  (:use [nexfilesd.process :as p] [nexfilesd.io :as io])
+  (:use [nexfilesd.process :as p]
+        [nexfilesd.io :as io])
   (:gen-class))
 
 (def builds [{
@@ -22,9 +23,22 @@
               }
              ])
 
+(defn- set-test-path [build-config]
+  (let [
+        path     (:path build-config)
+        new-path (clojure.string/replace path #"/mnt" "/tmp")]
+    (assoc build-config :path new-path)))
+
+(def test-builds (map set-test-path builds))
+
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Runs the main agent-loop, handling all build definitions"
   [& args]
   ;; todo: add timer-loop and execute process-builds via timer-loop
-  (io/output "Processing builds...")
-  (p/process-builds builds))
+  (if (=  0 (count args))
+    (do
+      (io/output "Processing builds...")
+      (p/process-builds builds))
+    (do
+      (io/output "Processing test-builds...")
+      (p/process-builds test-builds))))
