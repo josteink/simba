@@ -1,0 +1,9 @@
+
+* Refactoring options:
+** process.clj
+- get-fileset-from-config function
+  - get rid of per process boiler-plate like:
+        path (:path build)
+        files (io/get-files path)
+        file-sets (io/get-file-sets files)
+ 
