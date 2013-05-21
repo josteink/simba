@@ -73,6 +73,12 @@
 (defn generate-tablet-ui-for [key file-set]
   ;; TODO: implement
   ;; TODO: lookup shell invocation from lein-drip code
+  ;; 1. identify actual ZIP files to process (1-many)
+  ;; 2. generate proper names for patches (on a per orig-ZIP basis)
+  ;; for all, then....
+  ;; 3. copy ZIP to local storage
+  ;; 4. invoke (shell script for single zip)
+  ;; 5. copy result to target
   )
 
 (defn generate-tablet-ui [build]

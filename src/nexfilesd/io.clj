@@ -43,5 +43,3 @@
              new-file-set    (add-file-to-set current-file file-set)
              new-sets        (assoc existing-sets set-key new-file-set)]
          (recur remaining-files new-sets)))))
-
-(defn describe-file-set [file-set])
