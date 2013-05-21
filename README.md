@@ -1,12 +1,13 @@
-# nexfilesd
+# SIMBA - SIMple Build Automation Agent
 
-A build-automation agent customized for [nexfiles.kjonigsen.net](http://nexfiles.kjonigsen.net).
+SIMBA is a simple build-automation agent customized for [nexfiles.kjonigsen.net](http://nexfiles.kjonigsen.net)
+written in [clojure](http://clojure.org/).
 
 It may be useful for other purposes, but probably not.
 
 ## Installation
 
-Clone repo. Customize builds in src/nexfilesd/core.clj.
+Clone repo. Customize builds in src/simba/core.clj.
 
 Setup mount-points to remote location in local file-system via sshfs, curlftpfs or similar.
 
