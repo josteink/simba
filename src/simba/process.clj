@@ -46,13 +46,11 @@
         files             (io/get-files path)
         file-sets         (io/get-file-sets files)
         obsolete-sets     (get-sets-outside-retention file-sets retention)
-        num-oboslete-sets (count obsolete-sets)]
+        num-obsolete-sets (count obsolete-sets)]
     (io/output "Configuration has " (count files) " files and " (count file-sets) " file sets.")
-    (io/output num-oboslete-sets " sets outside retention.")
-    (let [obsolete-keys (keys obsolete-sets)]
-      (doseq [file-set-key obsolete-keys]
-        (purge-file-set file-set-key (get obsolete-sets file-set-key))))))
-
+    (io/output num-obsolete-sets " sets outside retention.")
+    (doseq [[set-key file-set] obsolete-sets]
+      (purge-file-set set-key file-set))))
 
 
 ; ===========================================================
@@ -65,10 +63,14 @@
     (some #(.contains % "tabletUI") names)))
 
 (defn get-sets-without-tablet-ui [file-sets]
-  (select-keys file-sets
-               (for [[k v] file-sets
-                     :when (not (has-tabletui? v))]
-                 k)))
+  (let [without-tabletui-keys (for [[k v] file-sets
+                                    :when (not (has-tabletui? v))]
+                                k)]
+    (select-keys file-sets without-tabletui-keys)))
+
+(defn get-rom-files [file-set]
+
+  )
 
 (defn generate-tablet-ui-for [key file-set]
   ;; TODO: implement
@@ -91,6 +93,5 @@
         num-candidate-sets (count candidate-sets)]
     (io/output "Configuration has " (count files) " files and " (count file-sets) " file sets.")
     (io/output num-candidate-sets " sets without mods.")
-    (let [candidate-keys (keys candidate-sets)]
-      (doseq [file-set-key candidate-keys]
-        (generate-tablet-ui-for file-set-key (get candidate-sets file-set-key))))))
+    (doseq [[set-key file-set] candidate-sets]
+      (generate-tablet-ui-for set-key file-set))))
