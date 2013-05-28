@@ -1,5 +1,13 @@
 (ns simba.process
-  (:use [simba.io :as io]))
+  (:use [clojure.java.shell :only (sh with-sh-dir)]
+        [simba.io :as io]))
+
+; ===========================================================
+; global settings
+; ===========================================================
+
+(def patcher-dir "/home/jostein/fastbuild/autopatcher")
+(def patcher-tool "./patch_rom_from_build.sh")
 
 ; ===========================================================
 ; main processing logic
@@ -69,19 +77,27 @@
     (select-keys file-sets without-tabletui-keys)))
 
 (defn get-rom-files [file-set]
+  ;; keep it simple: files with extension .zip
+  (filter #(= ".zip" (io/get-extension %)) file-set))
 
-  )
+(defn generate-tablet-ui-for-file [file]
+  (io/output "Processing file '" file "'")
+  (let [filename      (.getName file)
+        source-folder (-> file .getParentFile .getPath)
+        result        (with-sh-dir patcher-dir
+                        (sh patcher-tool source-folder filename))
+        status        (:exit result)]
+    (if (not (= 0 status))
+      (do
+        (io/output "Failed to generate tablet-ui:" (:out result)))
+      (do
+        (io/output "Successfully generated tablet-ui mod.")))))
 
 (defn generate-tablet-ui-for [key file-set]
-  ;; TODO: implement
-  ;; TODO: lookup shell invocation from lein-drip code
-  ;; 1. identify actual ZIP files to process (1-many)
-  ;; 2. generate proper names for patches (on a per orig-ZIP basis)
-  ;; for all, then....
-  ;; 3. copy ZIP to local storage
-  ;; 4. invoke (shell script for single zip)
-  ;; 5. copy result to target
-  )
+  (io/output "Generating tablet-ui for builds in file-set tagged '" key "'.")
+  (let [rom-files (get-rom-files file-set)]
+    (doseq [file rom-files]
+      (generate-tablet-ui-for-file file))))
 
 (defn generate-tablet-ui [build]
   (io/output "Generating tablet-ui for build-configuration '" (:config build) "'...")

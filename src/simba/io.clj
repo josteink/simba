@@ -43,3 +43,10 @@
              new-file-set    (add-file-to-set current-file file-set)
              new-sets        (assoc existing-sets set-key new-file-set)]
          (recur remaining-files new-sets)))))
+
+(defn get-extension [file]
+  (let [filename   (.getName file)
+        lastDotPos (.lastIndexOf filename ".")]
+    (if (= -1 lastDotPos)
+      "" ;; no extension
+      (.substring filename lastDotPos))))
