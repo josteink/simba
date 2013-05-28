@@ -50,3 +50,11 @@
     (if (= -1 lastDotPos)
       "" ;; no extension
       (.substring filename lastDotPos))))
+
+
+(defn get-file-sets-from-config [build]
+  "Returns a file-set for the build provided"
+  (let [path              (:path build)
+        files             (get-files path)
+        file-sets         (get-file-sets files)]
+    file-sets))

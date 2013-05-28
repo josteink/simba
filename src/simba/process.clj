@@ -9,6 +9,7 @@
 (def patcher-dir "/home/jostein/fastbuild/autopatcher")
 (def patcher-tool "./patch_rom_from_build.sh")
 
+
 ; ===========================================================
 ; main processing logic
 ; ===========================================================
@@ -49,13 +50,11 @@
 (defn purge-files [build]
   (io/output "Purging files for build-configuration '" (:config build) "'...")
   (let [
-        path              (:path build)
         retention         (:retention build 10)
-        files             (io/get-files path)
-        file-sets         (io/get-file-sets files)
+        file-sets         (io/get-file-sets-from-config build)
         obsolete-sets     (get-sets-outside-retention file-sets retention)
         num-obsolete-sets (count obsolete-sets)]
-    (io/output "Configuration has " (count files) " files and " (count file-sets) " file sets.")
+    (io/output "Configuration has " (count file-sets) " file sets.")
     (io/output num-obsolete-sets " sets outside retention.")
     (doseq [[set-key file-set] obsolete-sets]
       (purge-file-set set-key file-set))))
@@ -102,12 +101,10 @@
 (defn generate-tablet-ui [build]
   (io/output "Generating tablet-ui for build-configuration '" (:config build) "'...")
   (let [
-        path               (:path build)
-        files              (io/get-files path)
-        file-sets          (io/get-file-sets files)
+        file-sets          (io/get-file-sets-from-config build)
         candidate-sets     (get-sets-without-tablet-ui file-sets)
         num-candidate-sets (count candidate-sets)]
-    (io/output "Configuration has " (count files) " files and " (count file-sets) " file sets.")
+    (io/output "Configuration has " (count file-sets) " file sets.")
     (io/output num-candidate-sets " sets without mods.")
     (doseq [[set-key file-set] candidate-sets]
       (generate-tablet-ui-for set-key file-set))))
