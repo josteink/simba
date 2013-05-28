@@ -33,4 +33,4 @@ md5sum $TARGET >$TARGET.md5sum
 cp $TARGET $SOURCE_DIR
 cp $TARGET.md5sum $SOURCE_DIR
 
-rm $SOURCE
+rm $SOURCE $SOURCE.md5sum $TARGET $TARGET.md5sum
