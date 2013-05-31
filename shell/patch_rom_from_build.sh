@@ -17,6 +17,8 @@ sed -E "s/\s(\/[a-z0-9\.]+)+\/.+\.zip/ $SOURCE/g" $SOURCE_DIR/$SOURCE.md5sum >$S
 
 md5sum -c $SOURCE.md5sum || exit 1
 
+# clean up prior builds to not mess up later
+rm update-cm*
 
 echo "Creating patch $TARGET from $SOURCE."
 
