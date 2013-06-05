@@ -101,7 +101,7 @@
 (defn generate-tablet-ui [build]
   (io/output "Generating tablet-ui for build-configuration '" (:config build) "'...")
   (let [
-        file-sets          (io/get-file-sets-from-config build)
+        file-sets          (io/get-file-sets-from-config build io/get-set-key-with-config)
         candidate-sets     (get-sets-without-tablet-ui file-sets)
         num-candidate-sets (count candidate-sets)]
     (io/output "Configuration has " (count file-sets) " file sets.")
