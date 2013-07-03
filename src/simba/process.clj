@@ -64,10 +64,14 @@
 ; generating tablet UIs
 ; ===========================================================
 
+(defn is-tabletui-patch? [name]
+  (and (.contains name "tabletUI")
+       (not (.contains name "md5sum"))))
+
 (defn has-tabletui? [files]
   "check if list files has any element containing \"tabletUI\""
   (let [names (map #(.getName %) files)]
-    (some #(.contains % "tabletUI") names)))
+    (some is-tabletui-patch? names)))
 
 (defn get-sets-without-tablet-ui [file-sets]
   (let [without-tabletui-keys (for [[k v] file-sets

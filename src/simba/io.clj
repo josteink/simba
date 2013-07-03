@@ -24,9 +24,9 @@
 (defn get-set-key-with-config [fs-object]
   "simply check if name contains \"linaro\" and append that to key if it does"
   (let [default-key (get-set-key fs-object)
-        file-name (.getName fs-object)
-        linaro (re-find #"linaro" file-name)]
-    (if linaro
+        file-name   (.getName fs-object)
+        is-linaro   (re-find #"linaro" file-name)]
+    (if is-linaro
       (str default-key "-linaro")
       default-key)))
 
