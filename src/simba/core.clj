@@ -13,13 +13,13 @@
               :config "tf101-4.2" ;; just for show really
               :path "/mnt/stw/managed/tf101/cm10.1/"
               :retention 10
-              :processes [p/purge-files p/generate-tablet-ui]
+              :processes [p/purge-files p/generate-tablet-ui p/update-index]
               }
              {
               :config "tf101g-4.2" ;; just for show really
               :path "/mnt/stw/managed/tf101g/cm10.1/"
               :retention 10
-              :processes [p/purge-files p/generate-tablet-ui]
+              :processes [p/purge-files p/generate-tablet-ui p/update-index]
               }
              ])
 

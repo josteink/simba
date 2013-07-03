@@ -1,6 +1,7 @@
 (ns simba.process
   (:use [clojure.java.shell :only (sh with-sh-dir)]
-        [simba.io :as io]))
+        [simba.io :as io])
+  (:require [clojure.data.json :as json]))
 
 ; ===========================================================
 ; global settings
@@ -112,3 +113,40 @@
     (io/output num-candidate-sets " sets without mods.")
     (doseq [[set-key file-set] candidate-sets]
       (generate-tablet-ui-for set-key file-set))))
+
+; ===========================================================
+; creating a file index.
+; ===========================================================
+
+;; file-type identifiers & selectors
+(defn is-changelog? [file-name]
+  (.contains file-name "changes"))
+
+(defn is-linaro? [file-name]
+  (or (.contains file-name "linaro")
+      (is-changelog? file-name)))
+
+(defn is-standard? [file-name]
+  (not (is-linaro? file-name)
+       (is-changelog? file-name)))
+
+;; map selectors to release-configs
+(def release-configs
+  [{ :name "standard" :selector is-standard? }
+   { :name "linaro"   :selector is-linaro?   }])
+
+(defn get-release-set [config file-sets]
+  (let [{ :keys [name selector]} config]
+    name))
+
+;; map file-sets to release-sets
+(defn get-release-sets [configs file-sets]
+  (for [config configs]
+    (map #(get-release-set config %) file-sets)))
+
+(defn update-index [build]
+  (io/output "Updating release-index for build-configuration '" (:config build) "'...")
+  (let [file-sets (io/get-file-sets-from-config build)
+        release-sets (get-release-sets release-configs file-sets)]
+    (doseq [release-set release-sets]
+      (io/output "Release-set name: " release-set))))
